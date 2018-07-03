@@ -11,7 +11,7 @@ public class FirstRatings {
         ArrayList<Movie> moviesArrayList = new ArrayList<Movie>();
         FileResource fr = new FileResource(filename);
         for (CSVRecord currentRow : fr.getCSVParser()) {
-            System.out.println(currentRow);
+            //System.out.println(currentRow);
             String anID = currentRow.get(0);
             String aTitle = currentRow.get(1);
             String aYear = currentRow.get(2);
@@ -28,28 +28,55 @@ public class FirstRatings {
     }
 
     public void testLoadMovies(){
-        //ArrayList<Movie> mal = loadMovies("data/ratedmoviesfull.csv");
-        ArrayList<Movie> mal = loadMovies("data/ratedmovies_short.csv");
+
+        ArrayList<Movie> mal = loadMovies("data/ratedmoviesfull.csv");
+        //ArrayList<Movie> mal = loadMovies("data/ratedmovies_short.csv");
         int counter = 0;
         String searchedGenre = "comedy";
         int searchedMinutes = 150;
         ArrayList<Movie> longMovies = new ArrayList<Movie>();
 
+        HashMap<String, ArrayList<String>> mostMoviesPerDirector = new HashMap<String, ArrayList<String>>();
+
         for (Movie currentMovie : mal) {
+            // Count number of movies for searchedGenre
             List<String> genresList = Arrays.asList(currentMovie.getGenres().split(","));
             for (String genre : genresList) {
                 if (genre.trim().toLowerCase().equals(searchedGenre.toLowerCase())) {
                     counter ++;
                 }
             }
+            // Count number of movies longer than searchedMinutes
             if (currentMovie.getMinutes() > searchedMinutes) {
                 longMovies.add(currentMovie);
             }
+            // Count movies per director
+            for (String director: currentMovie.getDirector().split(",")) {
+                director = director.toLowerCase().trim();
+                if (!mostMoviesPerDirector.containsKey(director)) {
+                    mostMoviesPerDirector.put(director, new ArrayList<String>(Arrays.asList(currentMovie.getTitle())));
+                } else {
+                    mostMoviesPerDirector.get(director).add(currentMovie.getTitle());
+                }
+            }
+
             //System.out.println(currentMovie);
         }
         System.out.println("Movies ArrayList Length: " + mal.size());
         System.out.println("Long Movies ArrayList Length: " + longMovies.size());
         System.out.println("Total movies with genre " + searchedGenre + ": " + counter);
+
+        int maxCount = 0;
+        String resultDirector = "";
+        for (String director : mostMoviesPerDirector.keySet()) {
+            ArrayList<String> movies = mostMoviesPerDirector.get(director);
+            if (movies.size() > maxCount) {
+                resultDirector = director;
+                maxCount = movies.size();
+            }
+        }
+        System.out.println("Director with most movies is: " + resultDirector + " with " + maxCount + " movies");
+
 
     }
 
