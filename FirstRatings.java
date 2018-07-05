@@ -76,13 +76,33 @@ public class FirstRatings {
             }
         }
         System.out.println("Director with most movies is: " + resultDirector + " with " + maxCount + " movies");
+    }
 
+    public ArrayList<Rater> loadRaters(String filename){
+        ArrayList<Rater> ratersArrayList = new ArrayList<Rater>();
+        FileResource fr = new FileResource(filename);
+        for (CSVRecord currentRow : fr.getCSVParser()) {
+            //System.out.println(currentRow);
+            String raterID = currentRow.get(0);
+//            String movieID = currentRow.get(1);
+            String ratings = currentRow.get(2);
+//            String time = currentRow.get(3);
+            Rater currentRater = new Rater(raterID);
+            currentRater.addRating();
+            ratersArrayList.add(currentRater);
+        }
+        return ratersArrayList;
+    }
 
+    public void testLoadRaters(){
+        ArrayList<Rater> mal = loadRaters("data/ratings_short.csv");
+        //ArrayList<Rating> mal = loadRaters("data/ratings.csv");
     }
 
     public static void main(String args[]){
         FirstRatings fr = new FirstRatings();
-        fr.testLoadMovies();
+        //fr.testLoadMovies();
+        fr.testLoadRaters();
     }
 
 }
