@@ -81,21 +81,50 @@ public class FirstRatings {
     public ArrayList<Rater> loadRaters(String filename){
         ArrayList<Rater> ratersArrayList = new ArrayList<Rater>();
         FileResource fr = new FileResource(filename);
+
         for (CSVRecord currentRow : fr.getCSVParser()) {
             //System.out.println(currentRow);
             String raterID = currentRow.get(0);
-//            String movieID = currentRow.get(1);
-            String ratings = currentRow.get(2);
-//            String time = currentRow.get(3);
-            Rater currentRater = new Rater(raterID);
-            currentRater.addRating();
-            ratersArrayList.add(currentRater);
+            String item = currentRow.get(1);
+            double value = Double.parseDouble(currentRow.get(2));
+
+            if (ratersArrayList.size() == 0) {
+                System.out.println("First round, creating new entry");
+                Rater newRater = new Rater(raterID);
+                newRater.addRating(item, value);
+                ratersArrayList.add(newRater);
+            } else {
+
+                for (Rater currentRater : ratersArrayList) {
+                    System.out.println("currentRater.getID(): " + currentRater.getID());
+                    System.out.println("raterID: " + raterID);
+                    if (currentRater.getID().equals(raterID)) {
+                        System.out.println("Adding to rating");
+                        currentRater.addRating(item, value);
+                        break;
+                    } else {
+                        System.out.println("Creating new entry");
+                        Rater newRater = new Rater(raterID);
+                        newRater.addRating(item, value);
+                        ratersArrayList.add(newRater);
+                        break;
+                    }
+
+                }
+            }
         }
+
         return ratersArrayList;
+
     }
 
     public void testLoadRaters(){
-        ArrayList<Rater> mal = loadRaters("data/ratings_short.csv");
+        ArrayList<Rater> ral = loadRaters("data/ratings_short.csv");
+        for (Rater currentRater: ral) {
+            //System.out.println("Rater ID: " + currentRater.getID());
+            //System.out.println("Number of ratings: " + currentRater.numRatings());
+        }
+        //System.out.println("Raters ArrayList Length: " + ral.size());
         //ArrayList<Rating> mal = loadRaters("data/ratings.csv");
     }
 
