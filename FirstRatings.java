@@ -78,41 +78,42 @@ public class FirstRatings {
         System.out.println("Director with most movies is: " + resultDirector + " with " + maxCount + " movies");
     }
 
+    public ArrayList<Rater> addRaterToRaters(String raterID, String item, double value, ArrayList<Rater> ratersArrayList){
+        Rater newRater = new Rater(raterID);
+        newRater.addRating(item, value);
+        ratersArrayList.add(newRater);
+        return ratersArrayList;
+    }
+
     public ArrayList<Rater> loadRaters(String filename){
         ArrayList<Rater> ratersArrayList = new ArrayList<Rater>();
         FileResource fr = new FileResource(filename);
 
+        int index = 0;
         for (CSVRecord currentRow : fr.getCSVParser()) {
-            //System.out.println(currentRow);
+
             String raterID = currentRow.get(0);
             String item = currentRow.get(1);
             double value = Double.parseDouble(currentRow.get(2));
 
             if (ratersArrayList.size() == 0) {
-                System.out.println("First round, creating new entry");
-                Rater newRater = new Rater(raterID);
-                newRater.addRating(item, value);
-                ratersArrayList.add(newRater);
+                System.out.println("First round, creating new rater");
+                addRaterToRaters(raterID, item, value, ratersArrayList);
+                index++;
             } else {
+                if (ratersArrayList.get(index-1).getID().equals(raterID)) {
+                    System.out.println("Rater already in Raters, appending data");
+                    ratersArrayList.get(index-1).addRating(item, value);
 
-                for (Rater currentRater : ratersArrayList) {
-                    System.out.println("currentRater.getID(): " + currentRater.getID());
-                    System.out.println("raterID: " + raterID);
-                    if (currentRater.getID().equals(raterID)) {
-                        System.out.println("Adding to rating");
-                        currentRater.addRating(item, value);
-                        break;
-                    } else {
-                        System.out.println("Creating new entry");
-                        Rater newRater = new Rater(raterID);
-                        newRater.addRating(item, value);
-                        ratersArrayList.add(newRater);
-                        break;
-                    }
-
+                } else {
+                    System.out.println("New rater, creating new entry");
+                    addRaterToRaters(raterID, item, value, ratersArrayList);
+                    index++;
                 }
             }
         }
+
+
 
         return ratersArrayList;
 
