@@ -120,13 +120,14 @@ public class FirstRatings {
     }
 
     public void testLoadRaters(){
-        ArrayList<Rater> ral = loadRaters("data/ratings_short.csv");
+        //ArrayList<Rater> ral = loadRaters("data/ratings_short.csv");
+        ArrayList<Rater> ral = loadRaters("data/ratings.csv");
         for (Rater currentRater: ral) {
-            //System.out.println("Rater ID: " + currentRater.getID());
-            //System.out.println("Number of ratings: " + currentRater.numRatings());
+            System.out.println("Rater ID: " + currentRater.getID());
+            System.out.println("Number of ratings: " + currentRater.numRatings());
         }
-        //System.out.println("Raters ArrayList Length: " + ral.size());
-        //ArrayList<Rating> mal = loadRaters("data/ratings.csv");
+        System.out.println("Raters ArrayList Length: " + ral.size());
+
     }
 
     public static void main(String args[]){
