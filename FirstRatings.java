@@ -86,6 +86,8 @@ public class FirstRatings {
     }
 
     public ArrayList<Rater> loadRaters(String filename){
+        System.out.println();
+        System.out.println("Loading raters from file: " + filename);
         ArrayList<Rater> ratersArrayList = new ArrayList<Rater>();
         FileResource fr = new FileResource(filename);
 
@@ -97,16 +99,16 @@ public class FirstRatings {
             double value = Double.parseDouble(currentRow.get(2));
 
             if (ratersArrayList.size() == 0) {
-                System.out.println("First round, creating new rater");
+                System.out.println("New rater:\t\t\t\t\t" + raterID + " - creating new entry");
                 addRaterToRaters(raterID, item, value, ratersArrayList);
                 index++;
             } else {
                 if (ratersArrayList.get(index-1).getID().equals(raterID)) {
-                    System.out.println("Rater already in Raters, appending data");
+                    System.out.println("Rater:\t\t\t\t\t\t" + raterID + " - already in Raters, appending data");
                     ratersArrayList.get(index-1).addRating(item, value);
 
                 } else {
-                    System.out.println("New rater, creating new entry");
+                    System.out.println("New rater:\t\t\t\t\t" + raterID + " - creating new entry");
                     addRaterToRaters(raterID, item, value, ratersArrayList);
                     index++;
                 }
@@ -119,14 +121,52 @@ public class FirstRatings {
 
     }
 
-    public void testLoadRaters(){
-        //ArrayList<Rater> ral = loadRaters("data/ratings_short.csv");
-        ArrayList<Rater> ral = loadRaters("data/ratings.csv");
-        for (Rater currentRater: ral) {
-            System.out.println("Rater ID: " + currentRater.getID());
-            System.out.println("Number of ratings: " + currentRater.numRatings());
+    public void getRaterRatings(String rater_id, ArrayList<Rater> ratersArrayList){
+        System.out.println();
+        System.out.println("Retrieving specific rater data");
+        for (Rater currentRater : ratersArrayList){
+            if (currentRater.getID().contains("2")) {
+                System.out.println("Rater ID:\t\t\t\t\t" + currentRater.getID());
+                System.out.println("Number of ratings:\t\t\t" + currentRater.numRatings());
+            }
         }
-        System.out.println("Raters ArrayList Length: " + ral.size());
+    }
+
+    public void getMovieRatings(String movie, ArrayList<Rater> raterArrayList){
+        System.out.println();
+        System.out.println("Retrieving movie with maximum number of ratings");
+        int totalRatings = 0;
+        for (Rater currentRater : raterArrayList){
+            System.out.println(currentRater.getItemsRated());
+        }
+
+    }
+
+    public void getMaximumRatings(ArrayList<Rater> ratersArrayList){
+        System.out.println();
+        System.out.println("Retrieving maximum rater in ratersArrayList");
+        int maxRatings = 0;
+        String maxRater = "None";
+        for (Rater currentRater : ratersArrayList){
+            if (currentRater.numRatings() > maxRatings){
+                maxRatings = currentRater.numRatings();
+                maxRater = currentRater.getID();
+            }
+        }
+        System.out.println("maxRater:\t\t\t\t\t" + maxRater);
+        System.out.println("maxRatings:\t\t\t\t\t" + maxRatings);
+    }
+
+    public void testLoadRaters(){
+        ArrayList<Rater> ral = loadRaters("data/ratings_short.csv");
+        //ArrayList<Rater> ral = loadRaters("data/ratings.csv");
+
+        getRaterRatings("2", ral);
+        getMaximumRatings(ral);
+        getMovieRatings("1798709", ral);
+        System.out.println();
+        System.out.println("Raters ArrayList Length:\t" + ral.size());
+
 
     }
 
