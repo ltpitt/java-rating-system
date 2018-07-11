@@ -127,20 +127,26 @@ public class FirstRatings {
         System.out.println();
         System.out.println("Retrieving specific rater data");
         for (Rater currentRater : ratersArrayList){
-            if (currentRater.getID().contains("2")) {
+            if (currentRater.getID().equals(rater_id)) {
                 System.out.println("Rater ID:\t\t\t\t\t" + currentRater.getID());
                 System.out.println("Number of ratings:\t\t\t" + currentRater.numRatings());
             }
         }
     }
 
-    public void getMovieRatings(String movie, ArrayList<Rater> raterArrayList){
-        System.out.println();
-        System.out.println("Retrieving movie with maximum number of ratings");
+    public int getMovieRatings(String movie, ArrayList<Rater> raterArrayList){
+        HashMap<String, Integer> moviesHm = new HashMap<String, Integer>();
         int totalRatings = 0;
         for (Rater currentRater : raterArrayList){
-            System.out.println(currentRater.getItemsRated());
+            for (String currentMovie : currentRater.getItemsRated()) {
+                if (currentMovie.equals(movie)) {
+                    totalRatings ++;
+                }
+            }
         }
+        System.out.println();
+        System.out.println("Ratings for " + movie + ":\t\t" + totalRatings);
+        return totalRatings;
 
     }
 
@@ -166,27 +172,29 @@ public class FirstRatings {
                 moviesHs.add(movie);
             }
         }
+        System.out.println("Total movies rated:\t\t\t" + moviesHs.size());
         return moviesHs.size();
     }
 
     public void testLoadRaters(){
-        ArrayList<Rater> ral = loadRaters("data/ratings_short.csv");
-        //ArrayList<Rater> ral = loadRaters("data/ratings.csv");
 
-        getRaterRatings("2", ral);
+        //ArrayList<Rater> ral = loadRaters("data/ratings_short.csv");
+        ArrayList<Rater> ral = loadRaters("data/ratings.csv");
+
+        getRaterRatings("193", ral);
         getMaximumRatings(ral);
         getMovieRatings("1798709", ral);
         System.out.println();
+        getNumberOfDifferentMoviesRated(ral);
+        System.out.println();
         System.out.println("Raters ArrayList Length:\t" + ral.size());
-        System.out.println("Number of different movies rated:");
-        System.out.println(getNumberOfDifferentMoviesRated(ral));
 
 
     }
 
     public static void main(String args[]){
         FirstRatings fr = new FirstRatings();
-        //fr.testLoadMovies();
+        fr.testLoadMovies();
         fr.testLoadRaters();
     }
 
