@@ -78,6 +78,8 @@ public class FirstRatings {
         System.out.println("Director with most movies is: " + resultDirector + " with " + maxCount + " movies");
     }
 
+
+
     public ArrayList<Rater> addRaterToRaters(String raterID, String item, double value, ArrayList<Rater> ratersArrayList){
         Rater newRater = new Rater(raterID);
         newRater.addRating(item, value);
@@ -157,6 +159,16 @@ public class FirstRatings {
         System.out.println("maxRatings:\t\t\t\t\t" + maxRatings);
     }
 
+    public int getNumberOfDifferentMoviesRated(ArrayList<Rater> ratersArrayList){
+        HashSet<String> moviesHs = new HashSet<String>();
+        for (Rater currentRater : ratersArrayList) {
+            for (String movie : currentRater.getItemsRated()) {
+                moviesHs.add(movie);
+            }
+        }
+        return moviesHs.size();
+    }
+
     public void testLoadRaters(){
         ArrayList<Rater> ral = loadRaters("data/ratings_short.csv");
         //ArrayList<Rater> ral = loadRaters("data/ratings.csv");
@@ -166,6 +178,8 @@ public class FirstRatings {
         getMovieRatings("1798709", ral);
         System.out.println();
         System.out.println("Raters ArrayList Length:\t" + ral.size());
+        System.out.println("Number of different movies rated:");
+        System.out.println(getNumberOfDifferentMoviesRated(ral));
 
 
     }
