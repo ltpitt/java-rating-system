@@ -22,7 +22,7 @@ public class SecondRatings {
         // Default constructor
         this("ratedmoviesfull.csv", "ratings.csv");
     }
-    
+
     public int getMovieSize(){
         return myMovies.size();
     }
