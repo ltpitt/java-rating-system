@@ -4,9 +4,9 @@ public class MovieRunnerAverage {
 
    public void printAverageRatings(){
        SecondRatings sr = new SecondRatings("data/ratedmovies_short.csv", "data/ratings_short.csv");
-       System.out.println(sr.getMovieSize());
-       System.out.println(sr.getRaterSize());
-
+       sr.getMovieSize();
+       sr.getRaterSize();
+       sr.getAverageByID("1798709",2);
    }
 
    public static void main(String args[]){
