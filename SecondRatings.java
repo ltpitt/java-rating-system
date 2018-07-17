@@ -20,7 +20,7 @@ public class SecondRatings {
 
     public SecondRatings() {
         // Default constructor
-        this("ratedmoviesfull.csv", "ratings.csv");
+        this("data/ratedmoviesfull.csv", "data/ratings.csv");
     }
 
     public int getMovieSize(){
@@ -51,12 +51,27 @@ public class SecondRatings {
                 }
             }
         }
-        average = totalVotes / totalRatings;
         System.out.println();
         System.out.println("Total ratings for " + id + ":\t\t" + totalRatings);
         System.out.println("Total votes for " + id + ":\t\t" + totalVotes);
         System.out.println("Average for  " + id + ":\t\t\t" + average);
+        if (totalRatings == 0){
+            return 0.0;
+        }
+        average = totalVotes / totalRatings;
         return average;
     }
 
+    public ArrayList<Rating> getAverageRatings(int minimalRaters){
+        ArrayList<Rating> ro = new ArrayList<Rating>();
+        for (Movie currentMovie : myMovies){
+            double currentAverage = getAverageByID(currentMovie.getID(), minimalRaters);
+            if (currentAverage > 0.0) {
+                Rating currentRating = new Rating(currentMovie.getID(), getAverageByID(currentMovie.getID(), minimalRaters));
+                ro.add(currentRating);
+            }
+        }
+        System.out.println(ro);
+        return ro;
+    }
 }
