@@ -74,4 +74,16 @@ public class SecondRatings {
         System.out.println(ro);
         return ro;
     }
+
+    public String getTitle(String id){
+        String result = "ID not found";
+        for (Movie currentMovie : myMovies) {
+            if (currentMovie.getID().equals(id)){
+                result = currentMovie.getTitle();
+                break;
+            }
+        }
+        System.out.println("\ngetTitle for id " + id + ":\t" + result);
+        return result;
+    }
 }
