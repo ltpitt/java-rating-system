@@ -34,31 +34,23 @@ public class SecondRatings {
     }
 
     public double getAverageByID(String id, int minimalRaters){
-        double average = 0.0;
-        if (minimalRaters < minimalRaters) {
-            return average;
-        }
         HashMap<String, Integer> moviesHm = new HashMap<String, Integer>();
         int totalRatings = 0;
-        double totalVotes = 0;
+        double totalVotes = 0.0;
+        double average = 0.0;
         for (Rater currentRater : myRaters){
-            for (String currentMovie : currentRater.getItemsRated()) {
-                if (currentMovie.equals(id)) {
-                    if (currentRater.getRating(id) != -1) {
-                        totalRatings++;
-                        totalVotes = totalVotes + currentRater.getRating(id);
-                    }
-                }
+            if (currentRater.getItemsRated().contains(id)){
+                totalRatings++;
+                totalVotes += currentRater.getRating(id);
             }
+        }
+        if (totalRatings >= minimalRaters){
+            average = (double)totalVotes/totalRatings;
         }
         System.out.println();
         System.out.println("Total ratings for " + id + ":\t\t" + totalRatings);
         System.out.println("Total votes for " + id + ":\t\t" + totalVotes);
         System.out.println("Average for  " + id + ":\t\t\t" + average);
-        if (totalRatings == 0){
-            return 0.0;
-        }
-        average = totalVotes / totalRatings;
         return average;
     }
 
@@ -86,4 +78,6 @@ public class SecondRatings {
         System.out.println("\ngetTitle for id " + id + ":\t" + result);
         return result;
     }
+
+
 }
