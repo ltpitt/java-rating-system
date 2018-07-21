@@ -79,5 +79,16 @@ public class SecondRatings {
         return result;
     }
 
+    public String getID(String title){
+        String result = "NO SUCH TITLE.";
+        for (Movie currentMovie : myMovies) {
+            if (currentMovie.getTitle().contains(title)){
+                result = currentMovie.getID();
+                break;
+            }
+        }
+        System.out.println("\ngetID for title " + title + ":\t" + result);
+        return result;
+    }
 
 }
