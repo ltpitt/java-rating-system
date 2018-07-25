@@ -81,7 +81,7 @@ public class FirstRatings {
 
 
     public ArrayList<Rater> addRaterToRaters(String raterID, String item, double value, ArrayList<Rater> ratersArrayList){
-        Rater newRater = new Rater(raterID);
+        Rater newRater = new EfficientRater(raterID);
         newRater.addRating(item, value);
         ratersArrayList.add(newRater);
         return ratersArrayList;
@@ -135,41 +135,49 @@ public class FirstRatings {
     }
 
     public int getMovieRatings(String movie, ArrayList<Rater> raterArrayList){
-        HashMap<String, Integer> moviesHm = new HashMap<String, Integer>();
+
         int totalRatings = 0;
+
         for (Rater currentRater : raterArrayList){
-            for (String currentMovie : currentRater.getItemsRated()) {
-                if (currentMovie.equals(movie)) {
-                    totalRatings ++;
-                }
+            if (currentRater.hasRating(movie)) {
+                totalRatings++;
             }
         }
+
         System.out.println();
         System.out.println("Ratings for " + movie + ":\t\t" + totalRatings);
+
         return totalRatings;
 
     }
 
     public void getMaximumRatings(ArrayList<Rater> ratersArrayList){
+
         System.out.println();
         System.out.println("Retrieving maximum rater in ratersArrayList");
+
         int maxRatings = 0;
         String maxRater = "None";
+
         for (Rater currentRater : ratersArrayList){
             if (currentRater.numRatings() > maxRatings){
                 maxRatings = currentRater.numRatings();
                 maxRater = currentRater.getID();
             }
         }
+
         System.out.println("maxRater:\t\t\t\t\t" + maxRater);
         System.out.println("maxRatings:\t\t\t\t\t" + maxRatings);
+
     }
 
     public int getNumberOfDifferentMoviesRated(ArrayList<Rater> ratersArrayList){
         HashSet<String> moviesHs = new HashSet<String>();
         for (Rater currentRater : ratersArrayList) {
-            for (String movie : currentRater.getItemsRated()) {
-                moviesHs.add(movie);
+            if (!currentRater.getItemsRated().isEmpty()){
+                for (String movie : currentRater.getItemsRated()) {
+                    moviesHs.add(movie);
+                }
             }
         }
         System.out.println("Total movies rated:\t\t\t" + moviesHs.size());
