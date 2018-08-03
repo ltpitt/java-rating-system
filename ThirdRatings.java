@@ -42,6 +42,7 @@ public class ThirdRatings {
             average = (double)totalVotes/totalRatings;
         }
         System.out.println();
+        System.out.println(MovieDatabase.getMovie(id).getTitle());
         System.out.println("Total ratings for " + id + ":\t\t" + totalRatings);
         System.out.println("Total votes for " + id + ":\t\t" + totalVotes);
         System.out.println("Average for  " + id + ":\t\t\t" + average);
@@ -51,6 +52,21 @@ public class ThirdRatings {
     public ArrayList<Rating> getAverageRatings(int minimalRaters){
         ArrayList<Rating> ro = new ArrayList<Rating>();
         ArrayList<String> myMovies = MovieDatabase.filterBy(new TrueFilter());
+        for (String movieID : myMovies){
+            double currentAverage = getAverageByID(movieID, minimalRaters);
+            if (currentAverage > 0.0) {
+                Rating currentRating = new Rating(movieID, currentAverage);
+                ro.add(currentRating);
+            }
+        }
+        System.out.println(ro);
+        return ro;
+    }
+
+    public ArrayList<Rating> getAverageRatingsByFilter(int minimalRaters, Filter filterCriteria){
+        ArrayList<Rating> ro = new ArrayList<Rating>();
+        ArrayList<String> myMovies = MovieDatabase.filterBy(filterCriteria);
+
         for (String movieID : myMovies){
             double currentAverage = getAverageByID(movieID, minimalRaters);
             if (currentAverage > 0.0) {
