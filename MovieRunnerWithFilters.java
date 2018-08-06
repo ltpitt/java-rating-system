@@ -32,7 +32,7 @@ public class MovieRunnerWithFilters {
         sr.getAverageByID(ID, 1);
 
     }
-    
+
     public void printAverageRatingsByYear() {
         //ThirdRatings tr = new ThirdRatings();
         ThirdRatings tr = new ThirdRatings("data/ratings_short.csv");
