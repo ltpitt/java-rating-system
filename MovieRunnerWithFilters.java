@@ -53,14 +53,40 @@ public class MovieRunnerWithFilters {
             System.out.println(currentRatingAverage + " " + currentYear + " " + currentTitle);
         }
 
+    }
+
+    public void printAverageRatingsByGenre() {
+        //ThirdRatings tr = new ThirdRatings();
+        ThirdRatings tr = new ThirdRatings("data/ratings_short.csv");
+        System.out.println("Read data for \t" + tr.getRaterSize() + " raters");
+        System.out.println("Read data for \t" + MovieDatabase.size() + " movies" );
+
+        GenreFilter gf = new GenreFilter("Crime");
+        ArrayList<Rating> averageRatingsAL = new ArrayList<Rating>();
+        averageRatingsAL = tr.getAverageRatingsByFilter(1, gf);
+        Collections.sort(averageRatingsAL);
+
+        System.out.println("Found \t" + averageRatingsAL.size() + " movies" );
+        System.out.println();
+        for (Rating currentRating : averageRatingsAL){
+            double currentRatingAverage = currentRating.getValue();
+            String currentMovieID = currentRating.getItem();
+            String currentTitle = MovieDatabase.getMovie(currentMovieID).getTitle();
+            String genres = MovieDatabase.getMovie(currentMovieID).getGenres();
+            System.out.println(currentRatingAverage + " " + currentTitle);
+            System.out.println(genres);
+        }
 
     }
+
+
 
     public static void main(String args[]){
        MovieRunnerWithFilters mra = new MovieRunnerWithFilters();
        MovieDatabase.initialize("ratedmovies_short.csv");
        //mra.getAverageRatingOneMovie();
        //mra.printAverageRatings();
-       mra.printAverageRatingsByYear();
+       //mra.printAverageRatingsByYear();
+        mra.printAverageRatingsByGenre();
    }
 }
