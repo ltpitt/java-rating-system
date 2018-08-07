@@ -102,6 +102,28 @@ public class MovieRunnerWithFilters {
 
     }
 
+    public void printAverageRatingsByDirector() {
+        //ThirdRatings tr = new ThirdRatings();
+        ThirdRatings tr = new ThirdRatings("data/ratings_short.csv");
+        System.out.println("Read data for \t" + tr.getRaterSize() + " raters");
+        System.out.println("Read data for \t" + MovieDatabase.size() + " movies" );
+
+        DirectorsFilter df = new DirectorsFilter("Charles Chaplin,Michael Mann,Spike Jonze");
+        ArrayList<Rating> averageRatingsAL = new ArrayList<Rating>();
+        averageRatingsAL = tr.getAverageRatingsByFilter(1, df);
+        Collections.sort(averageRatingsAL);
+
+        System.out.println("Found \t" + averageRatingsAL.size() + " movies" );
+        System.out.println();
+        for (Rating currentRating : averageRatingsAL){
+            double currentRatingAverage = currentRating.getValue();
+            String currentMovieID = currentRating.getItem();
+            String currentTitle = MovieDatabase.getMovie(currentMovieID).getTitle();
+            String currentDirector = MovieDatabase.getDirector(currentMovieID);
+            System.out.println(currentRatingAverage + "\t" + currentTitle + "\n" + currentDirector);
+        }
+
+    }
 
     public static void main(String args[]){
        MovieRunnerWithFilters mra = new MovieRunnerWithFilters();
@@ -110,6 +132,7 @@ public class MovieRunnerWithFilters {
        //mra.printAverageRatings();
        //mra.printAverageRatingsByYear();
         //mra.printAverageRatingsByGenre();
-        mra.printAverageRatingsByMinutes();
+        //mra.printAverageRatingsByMinutes();
+        mra.printAverageRatingsByDirector();
    }
 }
