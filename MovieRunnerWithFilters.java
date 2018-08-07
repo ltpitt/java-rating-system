@@ -79,6 +79,28 @@ public class MovieRunnerWithFilters {
 
     }
 
+    public void printAverageRatingsByMinutes() {
+        //ThirdRatings tr = new ThirdRatings();
+        ThirdRatings tr = new ThirdRatings("data/ratings_short.csv");
+        System.out.println("Read data for \t" + tr.getRaterSize() + " raters");
+        System.out.println("Read data for \t" + MovieDatabase.size() + " movies" );
+
+        MinutesFilter mf = new MinutesFilter(110, 170);
+        ArrayList<Rating> averageRatingsAL = new ArrayList<Rating>();
+        averageRatingsAL = tr.getAverageRatingsByFilter(1, mf);
+        Collections.sort(averageRatingsAL);
+
+        System.out.println("Found \t" + averageRatingsAL.size() + " movies" );
+        System.out.println();
+        for (Rating currentRating : averageRatingsAL){
+            double currentRatingAverage = currentRating.getValue();
+            String currentMovieID = currentRating.getItem();
+            String currentTitle = MovieDatabase.getMovie(currentMovieID).getTitle();
+            int minutes = MovieDatabase.getMovie(currentMovieID).getMinutes();
+            System.out.println(currentRatingAverage + "\tTime:\t" + minutes + "\t" + currentTitle);
+        }
+
+    }
 
 
     public static void main(String args[]){
@@ -87,6 +109,7 @@ public class MovieRunnerWithFilters {
        //mra.getAverageRatingOneMovie();
        //mra.printAverageRatings();
        //mra.printAverageRatingsByYear();
-        mra.printAverageRatingsByGenre();
+        //mra.printAverageRatingsByGenre();
+        mra.printAverageRatingsByMinutes();
    }
 }
