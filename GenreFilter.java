@@ -1,5 +1,4 @@
 public class GenreFilter implements Filter {
-
     private String myGenre;
 
     public GenreFilter(String genre) {
@@ -10,5 +9,4 @@ public class GenreFilter implements Filter {
     public boolean satisfies(String id) {
         return MovieDatabase.getGenres(id).contains(myGenre);
     }
-
 }
