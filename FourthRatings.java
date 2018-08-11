@@ -11,6 +11,25 @@ import java.util.HashMap;
 
 public class FourthRatings {
 
+    // - Write the private helper method named dotProduct, which has two
+    // parameters, a Rater named me and a Rater named r.
+    // This method should first translate a rating from the scale 0 to 10
+    // to the scale -5 to 5 and return the dot product of the ratings
+    // of movies that they both rated.
+    // This method will be called by getSimilarities.
+
+    private double dotProduct(Rater me, Rater r){
+        double product = 0.0;
+        ArrayList<String> myItemsRated = me.getItemsRated();
+        ArrayList<String> raterItemsRater = r.getItemsRated();
+        for (String id : myItemsRated){
+            if (raterItemsRater.contains(id)){
+                product += (me.getRating(id) - 5) * (r.getRating(id) - 5);
+            }
+        }
+        return product;
+    }
+
     public double getAverageByID(String id, int minimalRaters){
 
         ArrayList<Rater> myRaters = RaterDatabase.getRaters();
