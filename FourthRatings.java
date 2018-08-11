@@ -2,8 +2,8 @@
 /**
  * Write a description of SecondRatings here.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Davide Nastri
+ * @version 8/11/2018
  */
 
 import java.util.ArrayList;
