@@ -7,16 +7,27 @@
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class FourthRatings {
 
-    // - Write the private helper method named dotProduct, which has two
-    // parameters, a Rater named me and a Rater named r.
-    // This method should first translate a rating from the scale 0 to 10
-    // to the scale -5 to 5 and return the dot product of the ratings
-    // of movies that they both rated.
-    // This method will be called by getSimilarities.
+    private ArrayList<Rating> getSimilarities(String id){
+        ArrayList<Rating> similarities = new ArrayList<Rating>();
+        ArrayList<Rater> raters = RaterDatabase.getRaters();
+        Rater me = RaterDatabase.getRater(id);
+        for (Rater currentRater : raters){
+            if (!currentRater.getID().equals(id)){
+                double product = dotProduct(me, currentRater);
+                if (product >= 0){
+                    Rating rating = new Rating(currentRater.getID(), product);
+                    similarities.add(rating);
+                }
+            }
+        }
+        Collections.sort(similarities);
+        return similarities;
+    }
 
     private double dotProduct(Rater me, Rater r){
         double product = 0.0;
