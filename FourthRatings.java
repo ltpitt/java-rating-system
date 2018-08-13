@@ -62,7 +62,34 @@ public class FourthRatings {
         return similarRatings;
     }
 
-
+    public ArrayList<Rating> getSimilarRatingsByFilter(String raterID, int numSimilarRaters, int minimalRaters, Filter filterCriteria){
+        ArrayList<Rating> similarRatings = new ArrayList<Rating>();
+        ArrayList<Rating> similarities = getSimilarities(raterID);
+        ArrayList<String> movies = MovieDatabase.filterBy(filterCriteria);
+        for (String movieID : movies){
+            double rating = 0.0;
+            int n = 0;
+            for (int i=0; i < numSimilarRaters; i++){
+                Rating currentRating = similarities.get(i);
+                String currentRatingID = currentRating.getItem();
+                double currentRatingValue = currentRating.getValue();
+                double o_rt = 0;
+                try {
+                    o_rt = RaterDatabase.getRater(currentRatingID).getRating(movieID);
+                }
+                catch(NullPointerException e) {
+                    continue;
+                }
+                rating += currentRatingValue * o_rt;
+                n++;
+            }
+            if (n <= minimalRaters){
+                similarRatings.add(new Rating(movieID, (rating/n)));
+            }
+            Collections.sort(similarRatings, Collections.reverseOrder());
+        }
+        return similarRatings;
+    }
 
     private ArrayList<Rating> getSimilarities(String id){
         ArrayList<Rating> similarities = new ArrayList<Rating>();
