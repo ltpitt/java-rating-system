@@ -12,6 +12,58 @@ import java.util.HashMap;
 
 public class FourthRatings {
 
+//    This method should return an ArrayList of type Rating, of movies and their weighted average ratings using
+//    only the top numSimilarRaters with positive ratings and including only those movies that have at least
+//    minimalRaters ratings from those most similar raters (not just minimalRaters ratings overall).
+//    For example, if minimalRaters is 3 and a movie has 4 ratings but only 2 of those ratings were made by
+//    raters in the top numSimilarRaters, that movie should not be included.
+//    These Rating objects should be returned in sorted order by weighted average rating from largest to smallest
+//    ratings.
+//    This method is very much like the getAverageRatings method you have written previously.
+//    In particular this method should:
+//    For every rater, get their similarity rating to the given parameter rater id.
+//    Include only those raters with positive similarity ratings—those that are more similar to rater id.
+//    Which method could you call?
+//    For each movie, calculate a weighted average movie rating based on: Use only the top (largest)
+//    numSimilarRaters raters.
+//    For each of these raters, multiply their similarity rating by the rating they gave that movie.
+//    This will emphasize those raters who are closer to the rater id, since they have greater weights.
+//    The weighted average movie rating for a particular movie is the sum of these weighted average ratings
+//    (for each rater multiply their similarity rating by their rating for the movie), divided by the total
+//    number of such ratings.
+//    This method returns an ArrayList of Ratings for movies and their calculated weighted ratings, in sorted order.
+
+    public ArrayList<Rating> getSimilarRatings(String raterID, int numSimilarRaters, int minimalRaters){
+        ArrayList<Rating> similarRatings = new ArrayList<Rating>();
+        ArrayList<Rating> similarities = getSimilarities(raterID);
+        ArrayList<String> movies = MovieDatabase.filterBy(new TrueFilter());
+        for (String movieID : movies){
+            double rating = 0.0;
+            int n = 0;
+            for (int i=0; i < numSimilarRaters; i++){
+                Rating currentRating = similarities.get(i);
+                String currentRatingID = currentRating.getItem();
+                double currentRatingValue = currentRating.getValue();
+                double o_rt = 0;
+                try {
+                    o_rt = RaterDatabase.getRater(currentRatingID).getRating(movieID);
+                }
+                catch(NullPointerException e) {
+                    continue;
+                }
+                rating += currentRatingValue * o_rt;
+                n++;
+            }
+            if (n <= minimalRaters){
+                similarRatings.add(new Rating(movieID, (rating/n)));
+            }
+            Collections.sort(similarRatings, Collections.reverseOrder());
+        }
+        return similarRatings;
+    }
+
+
+
     private ArrayList<Rating> getSimilarities(String id){
         ArrayList<Rating> similarities = new ArrayList<Rating>();
         ArrayList<Rater> raters = RaterDatabase.getRaters();
