@@ -10,11 +10,6 @@
 - Clone this repo locally
 - Open the project with IntelliJ IDEA
 
-## Release History
-
-* 0.0.1
-    * First commit
-
 ## Meta
 
 Davide Nastri – [@pitto](https://twitter.com/pitto) – d.nastri@gmail.com
