@@ -1,163 +1,125 @@
-
-/**
- * Write a description of SecondRatings here.
- *
- * @author Davide Nastri
- * @version 8/11/2018
- */
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Comparator;
 
 public class FourthRatings {
-
-    public ArrayList<Rating> getSimilarRatings(String raterID, int numSimilarRaters, int minimalRaters){
-        ArrayList<Rating> similarRatings = new ArrayList<Rating>();
-        ArrayList<Rating> similarities = getSimilarities(raterID);
-        ArrayList<String> movies = MovieDatabase.filterBy(new TrueFilter());
-        for (String movieID : movies){
-            double rating = 0.0;
-            int n = 0;
-            for (int i=0; i < numSimilarRaters; i++){
-                Rating currentRating = similarities.get(i);
-                String currentRatingID = currentRating.getItem();
-                double currentRatingValue = currentRating.getValue();
-                double o_rt = 0;
-                try {
-                    o_rt = RaterDatabase.getRater(currentRatingID).getRating(movieID);
-                }
-                catch(NullPointerException e) {
-                    continue;
-                }
-                rating += currentRatingValue * o_rt;
-                n++;
-            }
-            if (n <= minimalRaters){
-                similarRatings.add(new Rating(movieID, (rating/n)));
-            }
-            Collections.sort(similarRatings, Collections.reverseOrder());
-        }
-        return similarRatings;
+    public FourthRatings() {
     }
 
-    public ArrayList<Rating> getSimilarRatingsByFilter(String raterID, int numSimilarRaters, int minimalRaters, Filter filterCriteria){
-        ArrayList<Rating> similarRatings = new ArrayList<Rating>();
-        ArrayList<Rating> similarities = getSimilarities(raterID);
-        ArrayList<String> movies = MovieDatabase.filterBy(filterCriteria);
-        for (String movieID : movies){
-            double rating = 0.0;
-            int n = 0;
-            for (int i=0; i < numSimilarRaters; i++){
-                Rating currentRating = similarities.get(i);
-                String currentRatingID = currentRating.getItem();
-                double currentRatingValue = currentRating.getValue();
-                double o_rt = 0;
-                try {
-                    o_rt = RaterDatabase.getRater(currentRatingID).getRating(movieID);
-                }
-                catch(NullPointerException e) {
-                    continue;
-                }
-                rating += currentRatingValue * o_rt;
-                n++;
-            }
-            if (n <= minimalRaters){
-                similarRatings.add(new Rating(movieID, (rating/n)));
-            }
-            Collections.sort(similarRatings, Collections.reverseOrder());
-        }
-        return similarRatings;
-    }
-
-    private ArrayList<Rating> getSimilarities(String id){
-        ArrayList<Rating> similarities = new ArrayList<Rating>();
-        ArrayList<Rater> raters = RaterDatabase.getRaters();
-        Rater me = RaterDatabase.getRater(id);
-        for (Rater currentRater : raters){
-            if (!currentRater.getID().equals(id)){
-                double product = dotProduct(me, currentRater);
-                if (product >= 0){
-                    Rating rating = new Rating(currentRater.getID(), product);
-                    similarities.add(rating);
-                }
+    public ArrayList<Rating> getAverageRatings(int minimalRaters) {
+        ArrayList<Rating> ratingArrayList = new ArrayList<>();
+        for (String movieId : MovieDatabase.filterBy(new TrueFilter())) {
+            double averageRating = getAverageByID(movieId, minimalRaters);
+            if (averageRating != 0.0) {
+                ratingArrayList.add(new Rating(movieId, averageRating));
             }
         }
-        Collections.sort(similarities);
-        return similarities;
+        return ratingArrayList;
     }
 
-    private double dotProduct(Rater me, Rater r){
-        double product = 0.0;
-        ArrayList<String> myItemsRated = me.getItemsRated();
-        ArrayList<String> raterItemsRater = r.getItemsRated();
-        for (String id : myItemsRated){
-            if (raterItemsRater.contains(id)){
-                product += (me.getRating(id) - 5) * (r.getRating(id) - 5);
+    public ArrayList<Rating> getAverageRatingsByFilter(int minimalRaters, Filter criteriaFilter) {
+        ArrayList<Rating> ratingArrayList = new ArrayList<>();
+        for (String aMovieList : MovieDatabase.filterBy(criteriaFilter)) {
+            double averageRating = getAverageByID(aMovieList, minimalRaters);
+            if (averageRating != 0.0) {
+                ratingArrayList.add(new Rating(aMovieList, averageRating));
             }
         }
-        return product;
+        return ratingArrayList;
     }
 
-    public double getAverageByID(String id, int minimalRaters){
-
+    private double getAverageByID(String movieId, int minimalRaters) {
+        double totalRatings = 0.0;
+        int numberOfRatings = 0;
         ArrayList<Rater> myRaters = RaterDatabase.getRaters();
-        HashMap<String, Integer> moviesHm = new HashMap<String, Integer>();
-        int totalRatings = 0;
-        double totalVotes = 0.0;
-        double average = 0.0;
-        for (Rater currentRater : myRaters){
-            if (currentRater.getItemsRated().contains(id)){
-                totalRatings++;
-                totalVotes += currentRater.getRating(id);
+        for (Rater rater : myRaters) {
+            if (rater.hasRating(movieId)) {
+                numberOfRatings++;
+                totalRatings += rater.getRating(movieId);
             }
         }
-        if (totalRatings >= minimalRaters){
-            average = (double)totalVotes/totalRatings;
+        if (numberOfRatings < minimalRaters) {
+            return 0.0;
         }
-        System.out.println();
-        System.out.println(MovieDatabase.getMovie(id).getTitle());
-        System.out.println("Total ratings for " + id + ":\t\t" + totalRatings);
-        System.out.println("Total votes for " + id + ":\t\t" + totalVotes);
-        System.out.println("Average for  " + id + ":\t\t\t" + average);
-        return average;
+        return totalRatings / (double) numberOfRatings;
     }
 
-    public ArrayList<Rating> getAverageRatings(int minimalRaters){
-        ArrayList<Rating> ro = new ArrayList<Rating>();
-        ArrayList<String> myMovies = MovieDatabase.filterBy(new TrueFilter());
-        for (String movieID : myMovies){
-            double currentAverage = getAverageByID(movieID, minimalRaters);
-            if (currentAverage > 0.0) {
-                Rating currentRating = new Rating(movieID, currentAverage);
-                ro.add(currentRating);
+    private double dotProduct(Rater me, Rater rater) {
+        double result = 0.0;
+        for (String movieId : me.getItemsRated()) {
+            if (rater.hasRating(movieId)) {
+                result += (me.getRating(movieId) - 5) * (rater.getRating(movieId) - 5);
             }
         }
-        System.out.println(ro);
-        return ro;
+        return result;
     }
 
-    public ArrayList<Rating> getAverageRatingsByFilter(int minimalRaters, Filter filterCriteria){
-        ArrayList<Rating> ro = new ArrayList<Rating>();
-        ArrayList<String> myMovies = MovieDatabase.filterBy(filterCriteria);
-
-        for (String movieID : myMovies){
-            double currentAverage = getAverageByID(movieID, minimalRaters);
-            if (currentAverage > 0.0) {
-                Rating currentRating = new Rating(movieID, currentAverage);
-                ro.add(currentRating);
+    private ArrayList<Rating> getSimilarities(String id) {
+        ArrayList<Rating> list = new ArrayList<>();
+        Rater me = RaterDatabase.getRater(id);
+        for (Rater rater : RaterDatabase.getRaters()) {
+            if (!rater.getID().equals(me.getID()) && dotProduct(rater, me) >= 0.0) {
+                list.add(new Rating(rater.getID(), dotProduct(rater, me)));
             }
         }
-        System.out.println(ro);
-        return ro;
+        Collections.sort(list, Collections.reverseOrder());
+        return list;
     }
 
-
-    public static void main(String args[]){
-//        System.out.println("Yo!");
-//        FourthRatings fr = new FourthRatings();
-//        fr.getAverageByID("0006414",1);
+    public ArrayList<Rating> getSimilarRatings(String id, int numSimilarRaters, int minimalRaters) {
+        return getSimilarRatingsByFilter(id, numSimilarRaters, minimalRaters, new TrueFilter());
     }
 
+    public ArrayList<Rating> getSimilarRatingsByFilter(String id, int numSimilarRaters, int minimalRaters,
+                                                       Filter filterCriteria) {
+        ArrayList<Rating> ratingArrayList = new ArrayList<>();
+        ArrayList<Rating> similarRaterList = getSimilarities(id);
 
+        for (String movieId : MovieDatabase.filterBy(filterCriteria)) {
+            int numRatings = 0;
+            double weightedTotal = 0.0;
+            for (int index = 0; index < numSimilarRaters; index++) {
+                Rating similarityRating = similarRaterList.get(index);
+                double closeness = similarityRating.getValue();
+                String raterId = similarityRating.getItem();
+                Rater rater = RaterDatabase.getRater(raterId);
+                if (rater.hasRating(movieId)) {
+                    numRatings++;
+                    double movieRating = rater.getRating(movieId);
+                    weightedTotal += closeness * movieRating;
+                }
+            }
+            if (numRatings >= minimalRaters) {
+                ratingArrayList.add(new Rating(movieId, weightedTotal / numRatings));
+            }
+        }
+        Collections.sort(ratingArrayList, Comparator.reverseOrder());
+        return ratingArrayList;
+    }
+
+    public static void main(String[] args) {
+        String shortMovieCsv = "ratedmovies_short.csv";
+        String shortRatingsCsv = "ratings_do_product.csv";
+        //String bigMovieCsv = "ratedmoviesfull.csv";
+        //String bigRatingsCsv = "ratings.csv";
+
+        MovieDatabase.initialize(shortMovieCsv);
+        //MovieDatabase.initialize(bigMovieCsv);
+        RaterDatabase.initialize(shortRatingsCsv);
+        //RaterDatabase.initialize(bigRatingsCsv);
+
+        Rater rater_id_2 = RaterDatabase.getRater("15");
+        Rater rater_id_4 = RaterDatabase.getRater("20");
+
+        FourthRatings fourthRatings = new FourthRatings();
+
+        double result = fourthRatings.dotProduct(rater_id_2, rater_id_4);
+        System.out.println("Dot product for raters 15 and 20: " + result);
+        System.out.println(fourthRatings.getAverageByID("3285", 1));
+//        ArrayList<Rating> similarities = fourthRatings.getSimilarities("2");
+//        System.out.println("List of raters closest to ID 2 and their dot product:");
+//        for (Rating rating : similarities) {
+//            System.out.println(rating.getItem() + " " + rating.getValue());
+//        }
+    }
 }
