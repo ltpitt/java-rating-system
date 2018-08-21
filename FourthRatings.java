@@ -97,6 +97,35 @@ public class FourthRatings {
         return ratingArrayList;
     }
 
+    public ArrayList<Rating> getRecommendations(String id, int numRaters, int minimalRaters){
+        ArrayList<Rating> list = getSimilarities(id);
+        ArrayList<Rating> ret = new ArrayList<Rating>();
+        ArrayList<String> movies = MovieDatabase.filterBy(new TrueFilter());
+        for(String movieID: movies){
+            double ratingSum = 0;
+            int count = 0;
+            for(int k=0; k< numRaters;k++){
+                Rating r = list.get(k);
+                String raterID = r.getItem();
+                double weight = r.getValue();
+                if(r.getValue() > 0){
+                    Rater tempRater = RaterDatabase.getRater(raterID);
+                    if(tempRater.hasRating(movieID)){
+                        ratingSum += tempRater.getRating(movieID)*weight;
+                        count++;
+                    }
+                    //use rater id and weight in r to update running totals
+                }
+            }
+            if(count>=minimalRaters){
+                ret.add(new Rating(movieID, ratingSum/count));
+            }
+            //add rating for movie ID to ret
+        }
+        Collections.sort(ret, Collections.reverseOrder());
+        return ret; // sort first
+    }
+
     public static void main(String[] args) {
         String shortMovieCsv = "ratedmovies_short.csv";
         String shortRatingsCsv = "ratings_do_product.csv";
