@@ -1,28 +1,29 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class MovieRunnerSimilarRatings {
-
-    private String movieCsv, ratingsCsv;
+    private String shortMovieCsv, shortRatingsCsv, bigMovieCsv, bigRatingsCsv;
     private FourthRatings fourthRatings;
     private ArrayList<Rating> ratingArrayList, similarRatings, similarRatingsByFilter;
     private AllFilters filterList;
 
     public MovieRunnerSimilarRatings() {
-        movieCsv = "ratedmovies_short.csv";
-        //movieCsv = "ratedmoviesfull.csv";
-        ratingsCsv = "ratings_short.csv";
-        //ratingsCsv = "ratings.csv";
+        //shortMovieCsv = "ratedmovies_short.csv";
+        //shortRatingsCsv = "ratings_short.csv";
+        bigMovieCsv = "ratedmoviesfull.csv";
+        bigRatingsCsv = "ratings.csv";
 
-        MovieDatabase.initialize(movieCsv);
-        RaterDatabase.initialize(ratingsCsv);
+        //MovieDatabase.initialize(shortMovieCsv);
+        MovieDatabase.initialize(bigMovieCsv);
+        //RaterDatabase.initialize(shortRatingsCsv);
+        RaterDatabase.initialize(bigRatingsCsv);
 
         fourthRatings = new FourthRatings();
         System.out.println("Number of movies loaded from file: " + MovieDatabase.size());
         System.out.println("Number of raters loaded from file: " + RaterDatabase.size());
         filterList = new AllFilters();
     }
+
 
     public void printAverageRatings(int minimalRaters) {
         ratingArrayList = fourthRatings.getAverageRatings(minimalRaters);
@@ -139,22 +140,22 @@ public class MovieRunnerSimilarRatings {
         }
     }
 
-    public static void main(String args[]){
+    public static void main(String[] args) {
         MovieRunnerSimilarRatings movieRunnerSimilarRatings = new MovieRunnerSimilarRatings();
-        int minimalRaters = 5;
+        int minimalRaters = 3;
         int year = 1975;
         String genre = "Drama";
-        int minMinutes = 70;
-        int maxMinutes = 200;
-        String director = "Clint Eastwood,J.J. Abrams,Alfred Hitchcock,Sydney Pollack,David Cronenberg,Oliver Stone,Mike Leigh";
-        String id = "314";
+        int minMinutes = 80;
+        int maxMinutes = 160;
+        String director = "Drama";
+        String id = "168";
         int numSimilarRaters = 10;
-        movieRunnerSimilarRatings.printAverageRatings(minimalRaters);
+        //movieRunnerSimilarRatings.printAverageRatings(minimalRaters);
         //movieRunnerSimilarRatings.printAverageRatingsByYearAfterAndGenre(minimalRaters, year, genre);
         //movieRunnerSimilarRatings.printSimilarRatings(id, numSimilarRaters, minimalRaters);
         //movieRunnerSimilarRatings.printSimilarRatingsByGenre(id,numSimilarRaters,minimalRaters,genre);
         //movieRunnerSimilarRatings.printSimilarRatingsByDirector(id,numSimilarRaters,minimalRaters,director);
-        //movieRunnerSimilarRatings.printSimilarRatingsByGenreAndMinutes(id,numSimilarRaters,minimalRaters,genre,minMinutes,maxMinutes);
+        movieRunnerSimilarRatings.printSimilarRatingsByGenreAndMinutes(id,numSimilarRaters,minimalRaters,genre,minMinutes,maxMinutes);
         //movieRunnerSimilarRatings.printSimilarRatingsByYearAfterAndMinutes(id, numSimilarRaters, minimalRaters, year, minMinutes, maxMinutes);
     }
 
