@@ -1,3 +1,10 @@
+/**
+ * First implementation of Ratings.
+ * 
+ * @author Davide Nastri
+ * @version 23/7/2018
+ */
+
 import edu.duke.*;
 
 import java.util.*;
