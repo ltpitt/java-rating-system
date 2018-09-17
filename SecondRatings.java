@@ -1,9 +1,9 @@
 
 /**
- * Write a description of SecondRatings here.
+ * Ratings class
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Davide Nastri
+ * @version 13/09/2018
  */
 
 import java.util.*;
