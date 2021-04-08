@@ -1,5 +1,13 @@
+[![build](https://github.com/ltpitt/java-rating-system/workflows/build/badge.svg)](https://github.com/ltpitt/java-rating-system/actions)
+[![CodeQL](https://github.com/ltpitt/java-rating-system/workflows/CodeQL/badge.svg)](https://github.com/ltpitt/java-rating-system/actions?query=workflow%3ACodeQL)
+[![GitHub Issues](https://img.shields.io/github/issues-raw/ltpitt/java-rating-system)](https://github.com/ltpitt/java-rating-system/issues)
+[![Total Commits](https://img.shields.io/github/last-commit/ltpitt/java-rating-system)](https://github.com/ltpitt/java-rating-system/commits)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/4w/ltpitt/java-rating-system?foo=bar)](https://github.com/ltpitt/java-rating-system/commits)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ltpitt/java-rating-system/blob/master/LICENSE)
+![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)
+
 # Java Rating System
-> This repo contains a few examples of how to manipulate a CSV file using Java.
+> This repo contains an implementation of a Rating system using Java.
 
 ## Prerequisites
 
